@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Search {% endblock %}
+
+{% block bs_theme %}{{ gs.bsTheme }}{% endblock %}
+
+{% block flvicon %}
+    {% if logo %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('Uploads/'~logo) }}" />
+    {% else %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('DefaultImg/Jk.png') }}" />
+    {% endif %}
+{% endblock %}
+
+{% block header %}
+    {{ render(controller('CMSBundle:RenderPartials:header')) }}
+{% endblock %}
+
+
+
+
+{% block body %}
+    <div class="jumbotron" style="padding-left: 10%;padding-right: 5%; margin-left: 5%; margin-right: 5%;">
+        {% if pages is empty%}
+            No results found
+        {% else %}
+            {% for page in pages %}
+                <a href="{{ path('view_page',{'slug':page.slug}) }}">
+                    <div class="row" style="height: auto">
+                        <div class="col-sm-6" style="width: 300px">
+                            {% if page.image %}
+                                <img src="/../Uploads/{{ page.image }}" style="width: 100%">
+                            {% else %}
+                                <img src="/../{{ asset('Uploads/logo.png') }}"style="width: 100%">
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-6">
+                            <h3>{{ page.title }}</h3><br>
+                            <span class="glyphicon glyphicon-calendar"></span> {{ page.date|date('d-m-Y') }}
+                        </div>
+                    </div>
+                </a>
+                <hr>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

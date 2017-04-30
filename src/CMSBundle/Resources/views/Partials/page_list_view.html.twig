@@ -1,0 +1,24 @@
+<div >
+    {% if pages is empty%}
+        No results found
+    {% else %}
+        {% for page in pages %}
+            <a href="{{ path('view_page',{'slug':page.slug}) }}">
+                <div class="row" style="height: auto">
+                    <div class="col-sm-6" style="width: 300px">
+                        {% if page.image %}
+                            <img src="/../Uploads/{{ page.image }}" style="width: 100%">
+                        {% else %}
+                            <img src="/../{{ asset('Uploads/logo.png') }}"style="width: 100%">
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>{{ page.title }}</h3><br>
+                        <span class="glyphicon glyphicon-calendar"></span> {{ page.date|date('d-m-Y') }}
+                    </div>
+                </div>
+            </a>
+            <hr>
+        {% endfor %}
+    {% endif %}
+</div>

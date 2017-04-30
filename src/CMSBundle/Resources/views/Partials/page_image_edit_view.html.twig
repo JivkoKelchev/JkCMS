@@ -1,0 +1,12 @@
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+<br>Page image:
+{% if image %}
+<img src="{{ asset('Uploads/'~image) }}" style="height:100px">
+{% else %}
+    <span style="color: red"> This page has no image!!!</span>
+{% endif %}
+{{ form_start(form) }}
+            {{ form_row(form.height) }}
+            {{ form_row(form.width) }}
+<input type="submit" class="btn btn-success" style="width: 100%"  value="Save">
+{{ form_end(form) }}

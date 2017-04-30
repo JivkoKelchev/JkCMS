@@ -1,0 +1,276 @@
+{% extends 'base.html.twig' %}
+{% block bs_theme %}{{gs.bsTheme }}{% endblock %}
+
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block header %}
+    {{ render(controller('CMSBundle:RenderPartials:header')) }}
+{% endblock %}
+
+{% block body %}
+    <div  style="margin-left:80px;margin-right:80px; padding : 20px; min-width : 300px; background-color: rgba(0,0,0,1); color: white">
+        <label><h2>Edit Style </h2></label>
+        <hr>
+        {{ form_start(form) }}
+        <canvas class="picker col-sm-offset-2" id="picker" width="256px" height="256px">
+            Please use a canvas compatible browser
+        </canvas>
+        <div class="options" >
+            <div class="swatch swatch1 active" id="swatch1"></div>
+
+            <div class="swatch swatch2" id="swatch2"></div>
+
+            <div class="swatch swatch3" id="swatch3"></div>
+
+            <canvas id="selectedColor" class="col-sm-offset-2" width="256" height="15" style=";background-color: white">
+
+            </canvas>
+        {{ form_row(form.bgColor) }}
+
+            {#нямам логиката още :)#}
+        {#{{ form_row(form.bgImage) }}#}
+        {#{{ form_row(form.transparency) }}#}
+
+        Borders:
+        <hr>
+            <canvas class="picker2 col-sm-offset-2" id="picker2" width="256px" height="256px">
+                Please use a canvas compatible browser
+            </canvas>
+            <div class="options" >
+                <div class="swatch swatch4 active" id="swatch4"></div>
+
+                <div class="swatch swatch5" id="swatch5"></div>
+
+                <div class="swatch swatch6" id="swatch6"></div>
+
+                <canvas id="selectedColor2" class="col-sm-offset-2" width="256" height="15" style=";background-color: white">
+
+                </canvas>
+        {{ form_row(form.borderColor) }}
+        {{ form_row(form.topBorder) }}
+        {{ form_row(form.bottomBorder) }}
+        {{ form_row(form.leftBorder) }}
+        {{ form_row(form.rightBorder) }}
+        {{ form_row(form.roundBorder) }}
+        Size:
+        <hr>
+        {{ form_row(form.maxHeight) }}
+        {{ form_row(form.minHeight) }}
+        {{ form_row(form.maxWidth) }}
+        {{ form_row(form.minWidth) }}
+        Margins:
+        <hr>
+        {{ form_row(form.topMargin) }}
+        {{ form_row(form.bottomMargin) }}
+        {{ form_row(form.leftMargin) }}
+        {{ form_row(form.rightMargin) }}
+        Paddings:
+        <hr>
+        {{ form_row(form.topPadding) }}
+        {{ form_row(form.bottomPadding) }}
+        {{ form_row(form.leftPadding) }}
+        {{ form_row(form.rightPadding) }}
+        <input type="submit" class="btn btn-success col-sm-offset-2" value="create">
+        {{ form_end(form) }}
+    </div>
+
+
+
+
+
+
+
+        </div>
+        <p id="output"></p>
+        <div class="example" id="example"></div>
+
+        <script>
+            var r, g, b;
+            var active = 'swatch1';
+            var shadow = [10,119,0];
+            var midtone = [255,255,255];
+            var highlight = [10,119,0];
+
+            function colourWheel() {
+                var can = document.getElementById('picker');
+                can.attr = ('width', '256');
+                can.attr = ('height', '256');
+                var canvas = can.getContext('2d');
+                var pixels = canvas.createImageData(256, 256);
+                for(var x = 0; x < 256; x++) {
+                    for(var y = 0; y < 256; y++) {
+                        var idx = (x + y * 256) * 4;
+                        pixels.data[idx] =  350 - distance(x,95,y,85)*2;
+                        pixels.data[idx + 1] = 350 - distance(x,160,y,85)*2;
+                        pixels.data[idx + 2] = 350 - distance(x,128, y,160)*2;
+                        pixels.data[idx + 3] = 255;
+                    }
+                }
+                function distance(x1,x2,y1,y2){
+                    return Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
+                }
+                canvas.putImageData(pixels, 0, 0);
+                can.onclick = function(e){
+                    document.getElementById('example').style.background = rgbaReturn(r,g,b);
+                    document.getElementById(active).style.background = 'rgb('+r+','+g+','+b+')';
+                }
+                can.onmousemove = function(e){
+                    var x = e.pageX - can.offsetLeft - 10;
+                    var y = e.pageY - can.offsetTop - 10;
+                    var colour = canvas.getImageData(x, y, 1, 1);
+                    var data = colour.data;
+                    r = data[0];
+                    g = data[1];
+                    b = data[2];
+                    can.style.border = '10px solid rgb('+r+','+g+','+b+')';
+                }
+            }
+
+            function rgbaReturn(red, green, blue) {
+                switch(active){
+                    case 'swatch1':
+                        shadow = [red,green,blue];
+                        break;
+                    case 'swatch2':
+                        midtone = [red,green,blue];
+                        break;
+                    case 'swatch3':
+                        highlight = [red,green,blue];
+                }
+                var prefix;
+                var browsers = document.getElementsByName('browser');
+                for (var i = 0; i < browsers.length; i++){
+                    if (browsers[i].checked) {
+                        prefix = browsers[i].value;
+                    }
+                }
+                var output = 'rgb( ' + shadow[0] + ',' + shadow[1] + ',' + shadow[2] + ')';
+////////////////////////////////
+///////////////////////////////
+                document.getElementById('cmsbundle_style_type_bgColor').value = output;
+                document.getElementById('selectedColor').style.background = output;
+                return output;
+            }
+
+            document.getElementById('swatch1').onclick = function(){
+                active = 'swatch1';
+                document.getElementById('swatch1').classList.add('active');
+                document.getElementById('swatch2').classList.remove('active');
+                document.getElementById('swatch3').classList.remove('active');
+            }
+            document.getElementById('swatch2').onclick = function(){
+                active = 'swatch2';
+                document.getElementById('swatch2').classList.add('active');
+                document.getElementById('swatch1').classList.remove('active');
+                document.getElementById('swatch3').classList.remove('active');
+            }
+            document.getElementById('swatch3').onclick = function(){
+                active = 'swatch3';
+                document.getElementById('swatch3').classList.add('active');
+                document.getElementById('swatch1').classList.remove('active');
+                document.getElementById('swatch2').classList.remove('active');
+            }
+
+            colourWheel();
+        </script>
+
+
+    </div>
+    <p id="output2"></p>
+    <div class="example2" id="example2"></div>
+
+
+
+
+
+/////2
+    <script>
+        var r2, g2, b2;
+        var active2 = 'swatch4';
+        var shadow2 = [10,119,0];
+        var midtone2 = [255,255,255];
+        var highlight2 = [10,119,0];
+
+        function colourWheel2() {
+            var can2 = document.getElementById('picker2');
+            can2.attr = ('width', '256');
+            can2.attr = ('height', '256');
+            var canvas2 = can2.getContext('2d');
+            var pixels = canvas2.createImageData(256, 256);
+            for(var x = 0; x < 256; x++) {
+                for(var y = 0; y < 256; y++) {
+                    var idx = (x + y * 256) * 4;
+                    pixels.data[idx] =  350 - distance2(x,95,y,85)*2;
+                    pixels.data[idx + 1] = 350 - distance2(x,160,y,85)*2;
+                    pixels.data[idx + 2] = 350 - distance2(x,128, y,160)*2;
+                    pixels.data[idx + 3] = 255;
+                }
+            }
+            function distance2(x3,x4,y3,y4){
+                return Math.sqrt((x3 - x4)*(x3 - x4) + (y3 - y4)*(y3 - y4));
+            }
+            canvas2.putImageData(pixels, 0, 0);
+            can2.onclick = function(e){
+                document.getElementById('example2').style.background = rgbaReturn2(r2,g2,b2);
+                document.getElementById(active2).style.background = 'rgb('+r2+','+g2+','+b2+')';
+            }
+            can2.onmousemove = function(e){
+                var x = e.pageX - can2.offsetLeft - 10;
+                var y = e.pageY - can2.offsetTop - 10;
+                var colour = canvas2.getImageData(x, y, 1, 1);
+                var data = colour.data;
+                r2 = data[0];
+                g2 = data[1];
+                b2 = data[2];
+                can2.style.border = '10px solid rgb('+r2+','+g2+','+b2+')';
+            }
+        }
+
+        function rgbaReturn2(red2, green2, blue2) {
+            switch(active2){
+                case 'swatch4':
+                    shadow2 = [red2,green2,blue2];
+                    break;
+                case 'swatch5':
+                    midtone2 = [red2,green2,blue2];
+                    break;
+                case 'swatch6':
+                    highlight2 = [red2,green2,blue2];
+            }
+            var prefix;
+            var browsers = document.getElementsByName('browser');
+            for (var i = 0; i < browsers.length; i++){
+                if (browsers[i].checked) {
+                    prefix = browsers[i].value;
+                }
+            }
+            var output2 = 'rgb( ' + shadow2[0] + ',' + shadow2[1] + ',' + shadow2[2] + ')';
+////////////////////////////////
+///////////////////////////////
+            document.getElementById('cmsbundle_style_type_borderColor').value = output2;
+            document.getElementById('selectedColor2').style.background = output2;
+            return output2;
+        }
+
+        document.getElementById('swatch4').onclick = function(){
+            active2 = 'swatch4';
+            document.getElementById('swatch4').classList.add('active');
+            document.getElementById('swatch5').classList.remove('active');
+            document.getElementById('swatch6').classList.remove('active');
+        }
+        document.getElementById('swatch5').onclick = function(){
+            active2 = 'swatch5';
+            document.getElementById('swatch5').classList.add('active');
+            document.getElementById('swatch4').classList.remove('active');
+            document.getElementById('swatch6').classList.remove('active');
+        }
+        document.getElementById('swatch6').onclick = function(){
+            active2 = 'swatch6';
+            document.getElementById('swatch6').classList.add('active');
+            document.getElementById('swatch4').classList.remove('active');
+            document.getElementById('swatch5').classList.remove('active');
+        }
+
+        colourWheel2();
+    </script>
+{% endblock %}

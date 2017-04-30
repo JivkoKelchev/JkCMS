@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block bs_theme %}{{gs.bsTheme }}{% endblock %}
+
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block header %}
+    {{ render(controller('CMSBundle:RenderPartials:header')) }}
+{% endblock %}
+
+{% block body %}
+
+    <div  style="margin-left:80px;margin-right:80px; padding : 20px; min-width : 300px;" class="jumbotron">
+        <legend>Registration form</legend>
+
+       {{ form_start(form) }}
+        {{ form_row(form.username) }}
+        {{ form_row(form.password) }}
+        {{ form_row(form.email) }}
+        <input type="submit" class="btn btn-success col-sm-offset-2"  value="ok">
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

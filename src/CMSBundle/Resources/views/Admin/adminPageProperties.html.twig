@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% block bs_theme %}{{gs.bsTheme }}{% endblock %}
+
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block header %}
+    {{ render(controller('CMSBundle:RenderPartials:header')) }}
+{% endblock %}
+
+{% block body %}
+
+    <div  style="margin-left:80px;margin-right:80px; padding : 20px; min-width : 300px; background-color: rgba(0,0,0,1); color: white">
+        <label><h2>{{ page.title }}</h2></label>
+        <h3>Page Properties </h3>
+        <hr>
+        {{ form_start(form) }}
+        {% if page.image %}
+            <img class="col-sm-offset-2" style="height: 100px" src="/../Uploads/{{ page.image }}"><a  href="{{ path('delete_page_img',{'slug':page.slug}) }}">Remove Image</a>
+        {% endif %}
+        {{ form_row(form.imageFile) }}
+        {{ form_row(form.pageCategory) }}
+        <span class="col-sm-offset-1" >Tags:</span>
+        {% if page.tags != null %}
+            <div class="col-sm-offset-2">
+                {% for tag in page.tags %}
+                    <a href="{{ path('remove_tag',{'pageId':page.id,'tagId':tag.id}) }}" class="btn btn-xs btn-danger col-sm-offset-2" style="margin-bottom: 10px; margin-left: 10px;"><span class="glyphicon glyphicon-remove"></span> {{ tag.name }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <hr>
+        <span class="col-sm-offset-1" >Select Tags:</span>
+        <div class="col-sm-offset-2">
+            {% for tag in allTags %}
+                <a href="{{ path('add_tag',{'pageId':page.id,'tagId':tag.id}) }}" class="btn btn-xs btn-success col-sm-offset-2" style="margin-bottom: 10px; margin-left: 10px;"><span class="glyphicon glyphicon-tags"></span> {{ tag.name }}</a>
+            {% endfor %}
+        </div>
+        {{ form_row(form.newTagName) }}
+        <input type="submit" class="btn btn-success col-sm-offset-2" value="Save">
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+<br> Page list:
+{{ form_start(form) }}
+            {{ form_row(form.pageLimit) }}
+            {% for flash_message in app.session.flashBag.get('list_error') %}
+                <div class="col-sm-offset-2" style="color: red">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
+            {{ form_row(form.catFilter) }}
+            {{ form_row(form.type) }}
+<input type="submit" class="btn btn-success" style="width: 100%"  value="Save">
+{{ form_end(form) }}

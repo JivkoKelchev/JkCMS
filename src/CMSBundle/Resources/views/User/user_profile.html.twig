@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block bs_theme %}{{gs.bsTheme }}{% endblock %}
+
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block header %}
+    {{ render(controller('CMSBundle:RenderPartials:header')) }}
+{% endblock %}
+
+{% block body %}
+
+    <div  style="margin-left:80px;margin-right:80px; padding : 20px; min-width : 300px;" class="jumbotron">
+        <legend>Profile</legend>
+
+        {{ form_start(form) }}
+        {{ form_row(form.username) }}
+        {% if app.user.avatar != null %}
+            <img class="col-sm-offset-2" src="{{ asset('Uploads/'~app.user.avatar) }}" style="height: 100px; margin-bottom: 10px">
+            <a href="{{ path('user_delete_avatar') }}" >Delete your avatar</a>
+        {% endif %}
+        {{ form_row(form.avatarFile) }}
+        {{ form_row(form.password) }}
+        {{ form_row(form.email) }}
+        <input type="submit" class="btn btn-success col-sm-offset-2"  value="ok">
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

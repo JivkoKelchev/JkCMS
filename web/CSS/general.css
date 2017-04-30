@@ -1,0 +1,9 @@
+#body {
+    background-image: url("../Uploads/");
+    background-repeat: repeat-y;
+    background-position: right top;
+    background-size: 100% auto;
+    background-attachment: fixed;
+  background-color: rgb( 130,19,114);
+
+}

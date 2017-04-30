@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block bs_theme %}{{gs.bsTheme }}{% endblock %}
+
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block header %}
+    {{ render(controller('CMSBundle:RenderPartials:header')) }}
+{% endblock %}
+
+{% block body %}
+
+    <div  style="margin-left:80px;margin-right:80px; padding : 20px; min-width : 300px; background-color: rgba(0,0,0,1); color: white">
+        <label><h2>Create new page </h2></label>
+        <hr>
+        {{ form_start(form) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.pageCategory) }}
+            {{ form_rest(form) }}
+            <input type="submit" class="btn btn-success col-sm-offset-2" value="Create Page">
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+{% endblock %}

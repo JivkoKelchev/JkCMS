@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ page.title }} {% endblock %}
+
+{% block bs_theme %}{{ gs.bsTheme }}{% endblock %}
+
+{% block meta_keywords %}
+    {% if page.tags%}
+        <meta name="keywords" content="{% for tag in page.tags %}{{ tag.name }}, {% endfor %}">
+    {% endif %}
+{% endblock %}
+{% block flvicon %}
+    {% if logo %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('Uploads/'~logo) }}" />
+    {% else %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('DefaultImg/Jk.png') }}" />
+    {% endif %}
+{% endblock %}
+
+{% block header %}
+    {{ render(controller('CMSBundle:RenderPartials:header')) }}
+{% endblock %}
+
+
+
+
+{% block body %}
+    <div>
+        {% for row in page.raws %}
+            <div class="row">
+                {% for position in row.positions %}
+                    {% if position.elementType %}
+                        <div class="{{ position.size }}" {{ template_creator.getElementStyle(position)|raw }} >
+
+                            {{ render(controller('CMSBundle:RenderPartials:view'~position.elementType.type,
+                            {
+                                'positionId': position.id
+                            }
+                            ))
+                            }}
+                        </div>
+                    {% else %}
+                        <div class="{{  position.size }}">
+                            EMPTY ELEMENT
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

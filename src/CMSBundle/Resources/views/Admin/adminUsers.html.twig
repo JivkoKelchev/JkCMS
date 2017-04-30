@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+{% block bs_theme %}{{gs.bsTheme }}{% endblock %}
+
+{% block header %}
+    {{ render(controller('CMSBundle:RenderPartials:header')) }}
+{% endblock %}
+
+{% block body %}
+    <div  style="margin-left:80px;margin-right:80px; padding : 20px; min-width : 300px; background-color: rgba(0,0,0,1); color: white">
+        <label><h2>Users</h2></label>
+        <hr>
+        <table class="table" style="border: 1px solid; border-color: white">
+            <thead>
+            <tr>
+                <th>
+                    Username
+                </th>
+                <th>
+                    ROLE
+                </th>
+                <th>
+                    Active
+                </th>
+                <th>
+                    Edit
+                </th>
+            </tr>
+            </thead>
+            <tbody style="border: 1px solid; border-color: white">
+            {% for user in users %}
+                <tr>
+                    <td>
+                        {{ user.username }}
+                    </td>
+                    <td>
+                        {{ user.roles[0]}}
+                    </td>
+                    <td>
+                        {% if user.isActive %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_user-edit',{'userId':user.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
